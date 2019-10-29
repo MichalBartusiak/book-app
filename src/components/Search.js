@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import SearchModal from "./SearchModal";
 const Search = () => {
+  // hooks
   const [searchTerm, setSearchTerm] = useState("");
   const [books, setBooks] = useState({ items: [] });
-  const [isModalActive, setModalActive] = useState(true);
+  const [isModalActive, setModalActive] = useState(false);
 
   const handleSearchTerm = e => {
     setSearchTerm(e.target.value);
@@ -42,11 +43,7 @@ const Search = () => {
         <ul className="results">
           {books.items.map((book, index) => {
             return (
-              <li
-                onClick={handleModalOpen ? <SearchModal /> : null}
-                className="results__item"
-                key={index}
-              >
+              <li className="results__item" key={index}>
                 <div className="results__item-img">
                   <img
                     src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
@@ -57,9 +54,30 @@ const Search = () => {
                 <h4 className="results__item-author">
                   {book.volumeInfo.authors}
                 </h4>
+                <button
+                  onClick={handleModalOpen}
+                  className="results__item-button"
+                >
+                  More info
+                </button>
+
+                {/* Add favourite button */}
+                {handleModalOpen === true ? (
+                  <SearchModal
+                    modalToggle={handleModalOpen}
+                    name={book.volumeInfo.title}
+                    author={book.volumeInfo.authors}
+                  />
+                ) : null}
               </li>
             );
           })}
+          {handleModalOpen ? (
+            <SearchModal
+            // name={book.volumeInfo.title}
+            // author={book.volumeInfo.authors}
+            />
+          ) : null}
         </ul>
       </form>
     </>
